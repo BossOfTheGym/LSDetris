@@ -1,14 +1,13 @@
 cmake_minimum_required(VERSION 3.20)
 project(LSDetris)
 
-# TODO : this shit doesn't seem to work
-set(VCPKG_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake")
-set(CMAKE_TOOLCHAIN_FILE ${VCPKG_TOOLCHAIN_FILE} CACHE FILEPATH "path to vcpkg toolchain file")
-
-# I don't know if I do it the right way
 # activate toolchain file to enable search via find_package()
-# TODO : ...but this shit seems to work
-include(${VCPKG_TOOLCHAIN_FILE})
+# TODO : this shit doesn't seem to work when I set toolchain file from cmake script
+set(VCPKG_TOOLCHAIN_FILE "vcpkg/scripts/buildsystems/vcpkg.cmake")
+set(CMAKE_TOOLCHAIN_FILE ${VCPKG_TOOLCHAIN_FILE} CACHE FILEPATH "path to vcpkg toolchain file")
+# TODO : ...but this shit seems to work when I force its inclusion
+# include(${VCPKG_TOOLCHAIN_FILE})
+
 # variable from vcpkg.cmake toolchain file
 # this directory will contain all installed <Package>Config.cmake files
 # this is required for find_package()
