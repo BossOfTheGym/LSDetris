@@ -15,4 +15,4 @@ add_executable(audio_test ${audio_test_sources})
 target_link_libraries(audio_test ${ALL_DEPS})
 set_property(TARGET audio_test PROPERTY CXX_STANDART 20)
 
-#populate_filters()
+populate_filters()

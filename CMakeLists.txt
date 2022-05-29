@@ -1,62 +1,21 @@
 cmake_minimum_required(VERSION 3.20)
 project(LSDetris)
 
-include(ExternalProject)
-
-# external folder
-set(EXTERNAL_PREFIX "external")
-
-# vcpkg variables
-# TODO : rename all vars (except VCPKG_TARGET_TRIPLET) as VCPKG_ prefix is used by vcpkg itself
-set(VCPKG_PREFIX "${EXTERNAL_PREFIX}/vcpkg")
-set(VCPKG_SOURCE_DIR "${VCPKG_PREFIX}/src/vcpkg")
-set(VCPKG_REPOSITORY "https://github.com/microsoft/vcpkg")
-set(VCPKG_REPOSITORY_TAG "2022.05.10")
-set(VCPKG_SHOW_PROGRESS ON)
-set(VCPKG_BUILD_DIR ${CMAKE_BINARY_DIR}/${VCPKG_SOURCE_DIR})
-set(VCPKG_CMD ${VCPKG_BUILD_DIR}/vcpkg)
-
-if(WIN32)
-	set(VCPKG_CONFIGURE_CMD "${VCPKG_BUILD_DIR}/bootstrap-vcpkg.bat")
-	set(VCPKG_PLATFORM "windows")
-	set(VCPKG_TARGET_TRIPLET "x64-windows") # set vcpkg variable
-elseif(UNIX AND NOT APPLE)
-	set(VCPKG_CONFIGURE_CMD "${VCPKG_BUILD_DIR}/bootstrap-vcpkg.sh")
-	set(VCPKG_PLATFORM "linux")
-	set(VCPKG_TARGET_TRIPLET "x64-linux") # set vcpkg variable
-else()
-	message(FATAL_ERROR "System unsupported")
-endif()
-
-set(VCPKG_TOOLCHAIN_FILE "${VCPKG_BUILD_DIR}/scripts/buildsystems/vcpkg.cmake")
-#set(CMAKE_TOOLCHAIN_FILE ${VCPKG_TOOLCHAIN_FILE} CACHE FILEPATH "path to vcpkg toolchain file")
-
-# install vcpkg via ExternalProject
-ExternalProject_Add(vcpkg
-	PREFIX ${VCPKG_PREFIX}
-	GIT_REPOSITORY ${VCPKG_REPOSITORY}
-	GIT_TAG ${VCPKG_REPOSITORY_TAG}
-	GIT_PROGRESS ${VCPKG_SHOW_PROGRESS}
-	UPDATE_COMMAND "" # so it doesn't install itself each build (and we don't need any updates)
-	CONFIGURE_COMMAND ${VCPKG_CONFIGURE_CMD}
-	BUILD_COMMAND ""
-	INSTALL_COMMAND "")
-
-# download & install all vcpkg-managed dependencies
-set(VCPKG_PACKAGES "glew;glfw3;entt;openal-soft;glm")
-foreach(dep ${VCPKG_PACKAGES})
-	ExternalProject_Add_Step(vcpkg vcpkg-${dep}
-		COMMAND ${VCPKG_CMD} install ${dep} "--triplet=${VCPKG_TARGET_TRIPLET}")
-endforeach()
+# TODO : this shit doesn't seem to work
+set(VCPKG_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake")
+set(CMAKE_TOOLCHAIN_FILE ${VCPKG_TOOLCHAIN_FILE} CACHE FILEPATH "path to vcpkg toolchain file")
 
 # I don't know if I do it the right way
 # activate toolchain file to enable search via find_package()
+# TODO : ...but this shit seems to work
 include(${VCPKG_TOOLCHAIN_FILE})
 # variable from vcpkg.cmake toolchain file
 # this directory will contain all installed <Package>Config.cmake files
 # this is required for find_package()
 set(VCPKG_ALL_INSTALLED_DIR ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET})
+message(STATUS ${VCPKG_ALL_INSTALLED_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${VCPKG_ALL_INSTALLED_DIR})
+message(STATUS ${CMAKE_MODULE_PATH})
 
 # opengl dependencies
 if(WIN32)
@@ -72,6 +31,8 @@ endif()
 
 # vcpkg dependencies
 set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${VCPKG_ALL_INSTALLED_DIR})
+message(STATUS ${CMAKE_PREFIX_PATH})
+
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glew CONFIG REQUIRED)
 find_package(EnTT CONFIG REQUIRED)
