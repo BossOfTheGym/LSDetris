@@ -17,13 +17,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${VCPKG_ALL_INSTALLED_DIR})
 message(STATUS ${CMAKE_MODULE_PATH})
 
 # opengl dependencies
-if(WIN32)
+if(WIN32 OR (UNIX AND NOT APPLE))
 	find_package(OpenGL REQUIRED)
 	set(OPENGL_LIBS OpenGL::GL)
-elseif(UNIX AND NOT APPLE)
-	# TODO : linux specific stuff
-	message(FATAL_ERROR "OpenGL for linux will be a little bit later...")
-	set(OPENGL_LIBS "")
 else()
 	message(FATAL_ERROR "System unsupported")
 endif()
@@ -38,7 +34,7 @@ find_package(EnTT CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(OpenAL CONFIG REQUIRED) # yeah, installed by vcpkg
 
-set(ALL_DEPS "${OPENGL_LIBS};glfw;GLEW::glew;EnTT::EnTT;glm::glm;OpenAL::OpenAL")
+set(ALL_DEPS "${OPENGL_LIBS};glfw;GLEW::GLEW;EnTT::EnTT;glm::glm;OpenAL::OpenAL")
 
 # utility to create neat project filters
 # takes one optional parameter - source directory that is current directory (.) by default
