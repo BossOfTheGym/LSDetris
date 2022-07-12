@@ -20,3 +20,5 @@ To build the all-dancing, all-singing piece of software you simple call cmake --
 !!!Warning!!! Check your installed libraries (like ALSA libraries, for example) before building! I was missing sound on Ubuntu because of missing ALSA installation. You can get openal-soft separately and try to build it to have ability to check configuration and build output.
 
 This is the very basic version of README
+
+- [x] Suck some balls
