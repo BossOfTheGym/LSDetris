@@ -78,7 +78,8 @@ GLuint create_shader_program()
 }
 
 struct gfx_resources {
-	gfx_resources() {
+	gfx_resources()
+	{
 		glCreateVertexArrays(1, &dummy_vao);
 		shader_program = create_shader_program();
 	}
