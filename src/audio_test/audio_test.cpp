@@ -19,7 +19,7 @@ std::tuple<std::vector<std::int16_t>, std::uint32_t> create_buffer_data(int reso
 {
 	std::vector<std::int16_t> samples;
 	for (int i = 0; i < 2 * resolution; i++) {
-		samples.push_back(10000 * std::sin(2000 * std::numbers::pi / resolution * i));
+		samples.push_back(1000 * std::sin(2000 * std::numbers::pi / resolution * i));
 	}
 	return std::make_tuple(std::move(samples), resolution);
 }
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 	}
 
 	ALenum format = AL_FORMAT_MONO16;
-	auto [data, sample_rate] = create_buffer_data(44000);
+	auto [data, sample_rate] = create_buffer_data(41000);
 
 	std::cout << data.size() << " " << sample_rate << std::endl;
 

@@ -20,4 +20,10 @@ target_link_libraries(audio_test ${ALL_DEPS})
 set_property(TARGET audio_test PROPERTY CXX_STANDART 20)
 set_property(TARGET audio_test PROPERTY CXX_STANDARD_REQUIRED ON)
 
+set(audio_info_sources audio_test/audio_info.cpp)
+add_executable(audio_info ${audio_info_sources})
+target_link_libraries(audio_info ${ALL_DEPS})
+set_property(TARGET audio_info PROPERTY CXX_STANDART 20)
+set_property(TARGET audio_info PROPERTY CXX_STANDARD_REQUIRED ON)
+
 populate_filters()
